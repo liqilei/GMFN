@@ -18,7 +18,7 @@ The framework of our proposed GMFN. The colored arrows among different time step
 
 3. Copy `./options/test/` to `SRFBN_CVPR19/options/test/`. 
 
-4. Run commands  `cd SRFBN_CVPR19` and **one of followings ** for evaluation on *Set5*:
+4. Run commands  `cd SRFBN_CVPR19` and **one of followings** for evaluation on *Set5*:
 
 ```shell
 python test.py -opt options/test/test_GMFN_x2.json
