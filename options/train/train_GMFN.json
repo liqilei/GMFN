@@ -1,0 +1,63 @@
+{
+    "mode": "sr",
+    "use_cl": true,
+    "gpu_ids": [0],
+
+    "scale": 4,
+    "is_train": true,
+    "use_chop": true,
+    "rgb_range": 255,
+    "self_ensemble": false,
+    "save_image": false,
+
+    "datasets": {
+        "train": {
+            "mode": "LRHR",
+            "dataroot_HR": "/media/ser606/Data/Paper99/DIV2K_train_HR_aug/x4",
+            "dataroot_LR": "/media/ser606/Data/Paper99/DIV2K_train_LR_aug/x4",
+            "data_type": "npy",
+            "n_workers": 4,
+            "batch_size": 16,
+            "LR_size": 48,
+            "use_flip": true,
+            "use_rot": true,
+            "noise": "."
+        },
+        "val": {
+            "mode": "LRHR",
+            "dataroot_HR": "./results/HR/Set5/x4",
+            "dataroot_LR": "./results/LR/LRBI/Set5/x4",
+            "data_type": "img"
+        }
+    },
+
+    "networks": {
+        "which_model": "GMFN",
+        "num_features": 64,
+        "in_channels": 3,
+        "out_channels": 3,
+        "num_steps": 2,
+        "num_blocks": 7,
+        "num_reroute_feats": 4,
+        "num_refine_feats": 1
+    },
+
+    "solver": {
+        "type": "ADAM",
+        "learning_rate": 0.0002,
+        "weight_decay": 0,
+        "lr_scheme": "MultiStepLR",
+        "lr_steps": [200, 400, 600, 800],
+        "lr_gamma": 0.5,
+        "loss_type": "l1",
+        "manual_seed": 0,
+        "num_epochs": 1000,
+        "skip_threshold": 3,
+        "split_batch": 1,
+        "save_ckp_step": 50,
+        "save_vis_step": 1,
+        "pretrain": null,
+        "pretrained_path": "./experiments/GMFN_in3f64_x4/epochs/last_ckp.pth",
+        "cl_weights": [1.0, 1.0, 1.0, 1.0]
+    }
+}
