@@ -20,11 +20,11 @@ The framework of our proposed GMFN. The colored arrows among different time step
 
 4. Run commands  `cd SRFBN_CVPR19` and **one of followings ** for evaluation on *Set5*:
 
-   ```shell
+```shell
 python test.py -opt options/test/test_GMFN_x2.json
 python test.py -opt options/test/test_GMFN_x3.json
 python test.py -opt options/test/test_GMFN_x4.json
-   ```
+```
    
 5. Finally, PSNR/SSIM values for *Set5* are shown on your screen, you can find the reconstruction images in `./results`.
 
@@ -36,10 +36,10 @@ python test.py -opt options/test/test_GMFN_x4.json
 2. Modify `./options/train/train_GMFN.json` by following the instruction in `./options/train/README.md`.
 3. Run commands;
 
-   ```shell
+```shell
 cd SRFBN_CVPR19
 python train.py -opt options/train/train_GNFN.json
-   ```
+```
 
 4. You can monitor the training process in `./experiments`.
 
