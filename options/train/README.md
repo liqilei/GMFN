@@ -4,7 +4,7 @@ Let us take [`train_GMFN.json`](./train_GMFN_example.json) as an example.
 
 **Note**: Before you run `python train.py -opt options/train/*.json`, please carefully check options: `"scale"`, `"dataroot_HR"`, `"dataroot_LR"`, `"networks"` and `"pretrained_path"` (if `"pretrain"` option is set to `"resume"` or `"finetune"`).
 
-```json
+```C++
 {
     "mode": "sr", // solver type (only "sr" is provided)
     "use_cl": true, // whether use multiple losses (required by our SRFBN)
