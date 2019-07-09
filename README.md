@@ -8,7 +8,7 @@ The framework of our proposed GMFN. The colored arrows among different time step
 
 ## Demo
 
-*Clone SRFBN as backbone and satisfy its requirements.* 
+*Clone [SRFBN](https://github.com/Paper99/SRFBN_CVPR19) as the backbone and satisfy its requirements.* 
 
 ### Test
 
@@ -25,7 +25,7 @@ python test.py -opt options/test/test_GMFN_x2.json
 python test.py -opt options/test/test_GMFN_x3.json
 python test.py -opt options/test/test_GMFN_x4.json
 ```
-   
+
 5. Finally, PSNR/SSIM values for *Set5* are shown on your screen, you can find the reconstruction images in `./results`.
 
 *To test GMFN on other standard SR benchmarks or your own images, please refer to the instruction in SRFBN.* 
@@ -33,8 +33,8 @@ python test.py -opt options/test/test_GMFN_x4.json
 ### Train
 
 1. Prepare the training set according to [this](https://github.com/Paper99/SRFBN_CVPR19/blob/master/README.md#train) (1-3).
-2. Modify `./options/train/train_GMFN.json` by following the instruction in `./options/train/README.md`.
-3. Run commands;
+2. Modify `./options/train/train_GMFN.json` by following the instructions in `./options/train/README.md`.
+3. Run commands:
 
 ```shell
 cd SRFBN_CVPR19

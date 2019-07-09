@@ -4,8 +4,11 @@ from .blocks import ConvBlock, DeconvBlock, MeanShift, ResidualDenseBlock_8C
 
 
 class GFMRDB(nn.Module):
-    def __init__(self, num_features, num_blocks, act_type, norm_type=None):
+    def __init__(self, num_features, num_blocks, num_refine_feats, num_reroute_feats, act_type, norm_type=None):
         super(GFMRDB, self).__init__()
+
+        self.num_refine_feats = num_refine_feats
+        self.num_reroute_feats = num_reroute_feats
 
         self.RDBs_list = nn.ModuleList([ResidualDenseBlock_8C(
             num_features, kernel_size=3, gc=num_features, act_type=act_type
@@ -13,7 +16,7 @@ class GFMRDB(nn.Module):
 
         self.GFMs_list = nn.ModuleList([
                 ConvBlock(
-                    in_channels=4*num_features, out_channels=num_features, kernel_size=1,
+                    in_channels=num_reroute_feats*num_features, out_channels=num_features, kernel_size=1,
                     norm_type=norm_type, act_type=act_type
                 ),
                 ConvBlock(
@@ -22,7 +25,7 @@ class GFMRDB(nn.Module):
             ])
 
 
-    def forward(self, input_feat, last_feats_list, num_reroute_feats, num_refine_feats):
+    def forward(self, input_feat, last_feats_list):
 
         cur_feats_list = []
 
@@ -34,7 +37,7 @@ class GFMRDB(nn.Module):
             for idx, b in enumerate(self.RDBs_list):
 
                 # refining the lowest-level features
-                if idx < num_refine_feats:
+                if idx < self.num_refine_feats:
                     select_feat = self.GFMs_list[0](torch.cat(last_feats_list, 1))
                     input_feat = self.GFMs_list[1](torch.cat((select_feat, input_feat), 1))
 
@@ -42,7 +45,7 @@ class GFMRDB(nn.Module):
                 cur_feats_list.append(input_feat)
 
         # rerouting the highest-level features
-        return cur_feats_list[-num_reroute_feats:]
+        return cur_feats_list[-self.num_reroute_feats:]
 
 
 class GMFN(nn.Module):
@@ -67,8 +70,6 @@ class GMFN(nn.Module):
 
         self.num_features = num_features
         self.num_steps = num_steps
-        self.num_reroute_feats = num_reroute_feats
-        self.num_refine_feats = num_refine_feats
         self.upscale_factor = upscale_factor
 
         # RGB mean for DIV2K
@@ -81,7 +82,8 @@ class GMFN(nn.Module):
         self.feat_in = ConvBlock(4*num_features, num_features, kernel_size=1, act_type=act_type, norm_type=norm_type)
 
         # multiple residual dense blocks (RDBs) and multiple gated feedback modules (GFMs)
-        self.block = GFMRDB(num_features, num_blocks, act_type=act_type, norm_type=norm_type)
+        self.block = GFMRDB(num_features, num_blocks, num_refine_feats, num_reroute_feats,
+                            act_type=act_type, norm_type=norm_type)
 
         # reconstruction block
         self.upsample = nn.functional.interpolate
@@ -101,7 +103,7 @@ class GMFN(nn.Module):
         last_feats_list = []
 
         for _ in range(self.num_steps):
-            last_feats_list = self.block(init_feat, last_feats_list, self.num_reroute_feats, self.num_refine_feats)
+            last_feats_list = self.block(init_feat, last_feats_list)
             out = torch.add(up_lr_img, self.conv_out(self.out(last_feats_list[-1])))
             out = self.add_mean(out)
             sr_imgs.append(out)
