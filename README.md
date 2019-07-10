@@ -1,6 +1,6 @@
 # Gated Multiple Feedback Network for Image Super-Resolution 
 
-This repository contains the PyTorch implementation for the proposed GMFN [arXiv] (coming soon). 
+This repository contains the PyTorch implementation for the proposed GMFN [[arXiv](https://arxiv.org/abs/1907.04253)]. 
 
 ![](figs/GMFN.png)
 
